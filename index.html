@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HANA Cloud Table Data</title>
+    <!-- Import Google Icon Font and Materialize CSS -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1 0 auto;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        thead {
+            background-color: #f5f5f5;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        .form-container {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+        }
+
+        .table-container {
+            margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wrapper blue">
+            <a href="#" class="brand-logo center">HANA Cloud Data Viewer</a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col s12 m8 offset-m2 form-container z-depth-2">
+                    <h5 class="center-align">Enter Table Name and Filter Data</h5>
+                    <form method="POST">
+                        <div class="input-field">
+                            <input id="table_name" type="text" name="table_name" class="validate" required>
+                            <label for="table_name">Table Name</label>
+                        </div>
+                        
+                        <!-- Optional filters for columns -->
+                        <div class="input-field">
+                            <input id="filter_column" type="text" name="filter_column">
+                            <label for="filter_column">Filter Column (Optional)</label>
+                        </div>
+                        <div class="input-field">
+                            <input id="filter_value" type="text" name="filter_value">
+                            <label for="filter_value">Filter Value (Optional)</label>
+                        </div>
+
+                        <div class="center-align">
+                            <button class="btn waves-effect waves-light blue" type="submit" name="action">
+                                Submit
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            {% if table_html %}
+            <div class="table-container">
+                <h5 class="center-align">Table Data</h5>
+                <div class="card-panel">
+                    <!-- Render HTML table -->
+                    {{ table_html | safe }}
+                </div>
+
+                <form method="POST" action="/download">
+                    <input type="hidden" name="table_name" value="{{ request.form['table_name'] }}">
+                    <input type="hidden" name="filter_column" value="{{ request.form['filter_column'] }}">
+                    <input type="hidden" name="filter_value" value="{{ request.form['filter_value'] }}">
+                    <div class="center-align">
+                        <button class="btn waves-effect waves-light green" type="submit">
+                            Download Data
+                            <i class="material-icons right">file_download</i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer blue">
+        <div class="container">
+            <div class="center-align">
+                2024 HANA Cloud Data Viewer
+            </div>
+        </div>
+    </footer>
+
+    <!-- Import jQuery and Materialize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>
